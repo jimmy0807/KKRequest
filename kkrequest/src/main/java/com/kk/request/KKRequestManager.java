@@ -1,16 +1,12 @@
 package com.kk.request;
 
-import android.app.Application;
-
 import com.kk.request.Interceptor.KKBaseInterceptor;
 import com.kk.request.convertor.KKBaseDecoder;
 import com.kk.request.convertor.KKJsonDecoder;
 import com.kk.request.enumaration.KKRequestMethod;
+import com.kk.request.tools.ApplicationHelper;
 import com.zhouyou.http.EasyHttp;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,52 +32,12 @@ public class KKRequestManager
                 {
                     mInstance = new KKRequestManager();
                     mInstance.defaultDecoder = new KKJsonDecoder();
-                    EasyHttp.init(mInstance.getApplication());
+                    EasyHttp.init(ApplicationHelper.getApplication());
                 }
             }
         }
 
         return mInstance;
-    }
-
-    private Application getApplication()
-    {
-        Application application = null;
-        Class<?> activityThreadClass;
-        try {
-            activityThreadClass = Class.forName("android.app.ActivityThread");
-            Field appField = activityThreadClass
-                    .getDeclaredField("mInitialApplication");
-            // Object object = activityThreadClass.newInstance();
-            final Method method = activityThreadClass.getMethod(
-                    "currentActivityThread", new Class[0]);
-            // 得到当前的ActivityThread对象
-            Object localObject = method.invoke(null, (Object[]) null);
-            appField.setAccessible(true);
-            application = (Application) appField.get(localObject);
-
-            return application;
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     void add(KKBaseRequest request)

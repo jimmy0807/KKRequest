@@ -20,7 +20,8 @@ import com.kk.request.convertor.KKBaseCoveter;
 import com.kk.request.convertor.KKBaseDecoder;
 import com.kk.request.enumaration.KKRequestMethod;
 import com.kk.request.error.KKRequestError;
-import com.kk.request.jsonHelper.JsonHelper;
+import com.kk.request.tools.DebugHelper;
+import com.kk.request.tools.JsonHelper;
 import com.zhouyou.http.EasyHttp;
 import com.zhouyou.http.callback.SimpleCallBack;
 import com.zhouyou.http.exception.ApiException;
@@ -90,13 +91,10 @@ abstract public class KKBaseRequest<U,V>
         BaseRequest request = getEasyHttpRequest();
         if ( interceptor != null )
         {
-            if ( !interceptor.willExecute(request) )
-            {
-                new Handler().post( () -> { sendComplete(false); });
-
-                return this;
-            }
+            interceptor.willExecute(request);
         }
+
+        willExecute(request);
 
         if ( getRequestMethod() == KKRequestMethod.GET || getRequestMethod() == KKRequestMethod.POSTQUERY )
         {
@@ -129,7 +127,15 @@ abstract public class KKBaseRequest<U,V>
             request.baseUrl(getBaseUrl());
         }
 
-        handleExecute(request);
+        V mock = mockData();
+        if ( mock != null && DebugHelper.isApkInDebug() )
+        {
+            mSuccessClosure.onSuccess(mock);
+        }
+        else
+        {
+            handleExecute(request);
+        }
 
         return this;
     }
@@ -368,10 +374,7 @@ abstract public class KKBaseRequest<U,V>
     {
         return true;
     }
-    protected void willExecute(BaseRequest request)
-    {
-
-    }
+    protected void willExecute(BaseRequest request){}
 
     protected String getBaseUrl()
     {
@@ -423,6 +426,11 @@ abstract public class KKBaseRequest<U,V>
         }
 
         return (V)object;
+    }
+
+    protected V mockData()
+    {
+        return null;
     }
 
     public KKBaseCoveter getCoveter()
