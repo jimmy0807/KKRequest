@@ -47,7 +47,6 @@ abstract public class KKBaseRequest<U,V>
     protected CompleteClosure mCompleteClosure;
 
     private KKBaseCoveter coveter;
-    private KKBaseInterceptor interceptor;
 
     private String mAnnotationBaseUrl;
     private String mAnnotationSubUrl;
@@ -71,7 +70,7 @@ abstract public class KKBaseRequest<U,V>
 
         parseAnnotation();
 
-        KKBaseInterceptor interceptor = KKRequestManager.getInstance().getInterceptor();
+        KKBaseInterceptor interceptor = getInterceptor();
         if ( interceptor != null )
         {
             if ( !interceptor.willStart() )
@@ -143,7 +142,7 @@ abstract public class KKBaseRequest<U,V>
 
     private void handleError(ApiException e)
     {
-        KKBaseInterceptor interceptor = KKRequestManager.getInstance().getInterceptor();
+        KKBaseInterceptor interceptor = getInterceptor();
 
         Log.e("jimmy", "请求失败了:");
         if ( interceptor != null )
@@ -169,10 +168,6 @@ abstract public class KKBaseRequest<U,V>
     private void handleSuccess(String response)
     {
         KKBaseInterceptor interceptor = getInterceptor();
-        if ( interceptor == null )
-        {
-            interceptor = KKRequestManager.getInstance().getInterceptor();
-        }
 
         KKBaseInterceptorResult result = null;
 
@@ -454,7 +449,7 @@ abstract public class KKBaseRequest<U,V>
 
     public KKBaseInterceptor getInterceptor()
     {
-        return interceptor;
+        return KKRequestManager.getInstance().getInterceptor();
     }
 
     public KKBaseRequest<U,V> addCoveter(KKBaseCoveter coveter)
