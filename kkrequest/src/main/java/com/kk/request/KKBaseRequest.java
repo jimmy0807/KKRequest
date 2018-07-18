@@ -86,8 +86,6 @@ abstract public class KKBaseRequest<U,V>
             onSuccess(closure);
         }
 
-        KKRequestManager.getInstance().add(this);
-
         BaseRequest request = getEasyHttpRequest();
         if ( interceptor != null )
         {
@@ -130,7 +128,7 @@ abstract public class KKBaseRequest<U,V>
         V mock = mockData();
         if ( mock != null && DebugHelper.isApkInDebug() )
         {
-            mSuccessClosure.onSuccess(mock);
+            new Handler().post( () -> { mSuccessClosure.onSuccess(mock); });
         }
         else
         {
@@ -244,6 +242,8 @@ abstract public class KKBaseRequest<U,V>
     {
         int method = getRequestMethod();
         String url = getBaseUrl() + getSubUrl();
+
+        KKRequestManager.getInstance().add(this);
 
         if ( method == KKRequestMethod.GET )
         {
