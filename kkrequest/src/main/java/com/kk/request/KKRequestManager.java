@@ -15,7 +15,7 @@ public class KKRequestManager
     Set<KKBaseRequest> set = new HashSet<KKBaseRequest>();
     private String baseUrl;
     private int timeout;
-    private KKBaseDecoder defaultDecoder;
+    private KKBaseDecoder decoder;
 
     private volatile static KKRequestManager mInstance;
     private KKBaseInterceptor interceptor;
@@ -31,7 +31,7 @@ public class KKRequestManager
                 if ( mInstance == null )
                 {
                     mInstance = new KKRequestManager();
-                    mInstance.defaultDecoder = new KKJsonDecoder();
+                    mInstance.decoder = new KKJsonDecoder();
                     EasyHttp.init(ApplicationHelper.getApplication());
                 }
             }
@@ -52,7 +52,7 @@ public class KKRequestManager
 
     public KKBaseDecoder getDefaultDecoder()
     {
-        return defaultDecoder;
+        return decoder;
     }
 
     public int getDefaultRequestMethod()
@@ -60,9 +60,9 @@ public class KKRequestManager
         return mRequestMethod;
     }
 
-    public KKRequestManager setDefaultDecoder(KKBaseDecoder defaultDecoder)
+    public KKRequestManager setDecoder(KKBaseDecoder decoder)
     {
-        this.defaultDecoder = defaultDecoder;
+        this.decoder = decoder;
 
         return this;
     }

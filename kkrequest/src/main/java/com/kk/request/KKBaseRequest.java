@@ -16,7 +16,7 @@ import com.kk.request.annotation.KKPostQuery;
 import com.kk.request.annotation.KKPut;
 import com.kk.request.annotation.KKSubUrl;
 import com.kk.request.annotation.KKUpload;
-import com.kk.request.convertor.KKBaseCoveter;
+import com.kk.request.convertor.KKBaseConveter;
 import com.kk.request.convertor.KKBaseDecoder;
 import com.kk.request.enumaration.KKRequestMethod;
 import com.kk.request.error.KKRequestError;
@@ -46,7 +46,7 @@ abstract public class KKBaseRequest<U,V>
     protected FailedClosure mFailedClosure;
     protected CompleteClosure mCompleteClosure;
 
-    private KKBaseCoveter coveter;
+    private KKBaseConveter Conveter;
 
     private String mAnnotationBaseUrl;
     private String mAnnotationSubUrl;
@@ -175,7 +175,7 @@ abstract public class KKBaseRequest<U,V>
         if ( target == null )
         {
             //不会走这里
-            sendError(new KKRequestError(KKRequestError.ConvertError, "内部发生错误"));
+            sendError(new KKRequestError(KKRequestError.ConvertError, "内部发生错误,请指定decode"));
         }
         else
         {
@@ -209,7 +209,7 @@ abstract public class KKBaseRequest<U,V>
             {
                 if ( target != null )
                 {
-                    KKBaseCoveter c = getCoveter();
+                    KKBaseConveter c = getConveter();
 
                     if ( c == null )
                     {
@@ -442,9 +442,9 @@ abstract public class KKBaseRequest<U,V>
         return null;
     }
 
-    public KKBaseCoveter getCoveter()
+    public KKBaseConveter getConveter()
     {
-        return coveter;
+        return Conveter;
     }
 
     public KKBaseInterceptor getInterceptor()
@@ -452,9 +452,9 @@ abstract public class KKBaseRequest<U,V>
         return KKRequestManager.getInstance().getInterceptor();
     }
 
-    public KKBaseRequest<U,V> addCoveter(KKBaseCoveter coveter)
+    public KKBaseRequest<U,V> addConveter(KKBaseConveter Conveter)
     {
-        this.coveter = coveter;
+        this.Conveter = Conveter;
 
         return this;
     }

@@ -1,6 +1,6 @@
 package com.kk.request.convertor;
 
-public interface KKBaseCoveterInterface<U,V>
+public interface KKBaseConveterInterface<U,V>
 {
     V onReceieve(U object);
 }

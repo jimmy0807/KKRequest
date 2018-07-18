@@ -1,6 +1,6 @@
 package com.kk.request.convertor;
 
-abstract public class KKBaseCoveter<U,V> implements KKBaseCoveterInterface<U,V>
+abstract public class KKBaseConveter<U,V> implements KKBaseConveterInterface<U,V>
 {
 
 }
