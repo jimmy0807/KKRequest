@@ -47,6 +47,7 @@ abstract public class KKBaseRequest<U,V>
     protected CompleteClosure mCompleteClosure;
 
     private KKBaseCoveter coveter;
+    private KKBaseInterceptor interceptor;
 
     private String mAnnotationBaseUrl;
     private String mAnnotationSubUrl;
@@ -167,7 +168,13 @@ abstract public class KKBaseRequest<U,V>
 
     private void handleSuccess(String response)
     {
-        KKBaseInterceptor interceptor = KKRequestManager.getInstance().getInterceptor();
+        KKBaseInterceptor interceptor = getInterceptor();
+        if ( interceptor == null )
+        {
+            interceptor = KKRequestManager.getInstance().getInterceptor();
+        }
+
+        KKBaseInterceptorResult result = null;
 
         Object target = getDecoder().decode(response);
         if ( target == null )
@@ -181,15 +188,19 @@ abstract public class KKBaseRequest<U,V>
             {
                 if ( interceptor != null )
                 {
-                    KKBaseInterceptorResult result = interceptor.onReceieve((U)target);
+                    result = interceptor.onReceieve((U)target);
                     if ( result != null )
                     {
-                        if ( result.getCode() != 0 )
+                        if ( result.getNextStep() == KKBaseInterceptorResult.NextFailed )
                         {
                             sendError(new KKRequestError(result.getCode(), result.getMessage()));
+                            target = null;
+                        }
+                        else
+                        {
+                            target = result.getData();
                         }
 
-                        target = result.getData();
                     }
                 }
             }
@@ -201,7 +212,7 @@ abstract public class KKBaseRequest<U,V>
 
             try
             {
-                if ( target!= null )
+                if ( target != null )
                 {
                     KKBaseCoveter c = getCoveter();
 
@@ -216,7 +227,10 @@ abstract public class KKBaseRequest<U,V>
                 }
                 else
                 {
-                    sendError(new KKRequestError(KKRequestError.ConvertError, "内部发生错误"));
+                    if ( result != null && result.getNextStep() == KKBaseInterceptorResult.NextSuccess )
+                    {
+                        sendError(new KKRequestError(KKRequestError.ConvertError, "内部发生错误"));
+                    }
                 }
             }
             catch (Exception e)
@@ -436,6 +450,11 @@ abstract public class KKBaseRequest<U,V>
     public KKBaseCoveter getCoveter()
     {
         return coveter;
+    }
+
+    public KKBaseInterceptor getInterceptor()
+    {
+        return interceptor;
     }
 
     public KKBaseRequest<U,V> addCoveter(KKBaseCoveter coveter)
