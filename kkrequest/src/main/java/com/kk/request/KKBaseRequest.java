@@ -149,17 +149,21 @@ abstract public class KKBaseRequest<U,V>
             if ( result != null )
             {
                 KKRequestError error = new KKRequestError(result.getCode(), result.getMessage());
-                error.setDebugErrorCode(e.getCode());
                 sendError(error);
             }
             else
             {
-                KKRequestError error = new KKRequestError(e.getCode(), e.getMessage());
-                error.setDebugErrorCode(e.getCode());
+                KKRequestError error = new KKRequestError(KKRequestError.ServerError, "服务器发生异常");
                 sendError(error);
             }
         }
+        else
+        {
+            KKRequestError error = new KKRequestError(KKRequestError.ServerError, "服务器发生异常");
+            sendError(error);
+        }
 
+        KKRequestManager.getInstance().remove( KKBaseRequest.this);
         sendComplete(true );
     }
 
