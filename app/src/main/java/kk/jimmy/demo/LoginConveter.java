@@ -1,6 +1,5 @@
 package kk.jimmy.demo;
 
-import com.example.jimmy.rxjava.request.convertor.KKBaseCoveter;
 
 import java.util.ArrayList;
 import java.util.List;

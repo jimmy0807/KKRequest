@@ -92,12 +92,6 @@ abstract public class KKBaseRequest<U,V>
         }
 
         BaseRequest request = getEasyHttpRequest();
-        if ( interceptor != null )
-        {
-            interceptor.willExecute(request);
-        }
-
-        willExecute(request);
 
         if ( getRequestMethod() == KKRequestMethod.GET || getRequestMethod() == KKRequestMethod.POSTQUERY )
         {
@@ -400,7 +394,6 @@ abstract public class KKBaseRequest<U,V>
     {
         return true;
     }
-    protected void willExecute(BaseRequest request){}
     protected void willShowLoadingView() {  }
     protected void willShowToast(String message) {  }
 

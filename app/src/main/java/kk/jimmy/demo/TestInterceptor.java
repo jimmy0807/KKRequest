@@ -2,6 +2,8 @@ package kk.jimmy.demo;
 
 import com.kk.request.Interceptor.KKBaseInterceptor;
 import com.kk.request.Interceptor.KKBaseInterceptorResult;
+import com.zhouyou.http.exception.ApiException;
+import com.zhouyou.http.request.BaseRequest;
 
 import org.json.JSONObject;
 
@@ -10,11 +12,9 @@ public class TestInterceptor extends KKBaseInterceptor<JSONObject>
     public boolean willStart() {
         return true;
     };
-
-    //这里可以改head
-    public boolean willExecute(BaseRequest request)
+  //这里可以改head
+    public void willExecute(BaseRequest request)
     {
-        return true;
 
     };
 
