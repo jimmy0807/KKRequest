@@ -14,6 +14,8 @@ import com.kk.request.annotation.KKGsonObject;
 import com.kk.request.annotation.KKPostBody;
 import com.kk.request.annotation.KKPostQuery;
 import com.kk.request.annotation.KKPut;
+import com.kk.request.annotation.KKShowLoadingView;
+import com.kk.request.annotation.KKShowToast;
 import com.kk.request.annotation.KKSubUrl;
 import com.kk.request.annotation.KKUpload;
 import com.kk.request.convertor.KKBaseConveter;
@@ -53,6 +55,9 @@ abstract public class KKBaseRequest<U,V>
     private Class mGsonListClass;
     private Class mGsonObjectClass;
     private int mRequestMethod = -1;
+
+    private boolean mShowLoadingView = false;
+    private boolean mShowToast = false;
 
     public KKBaseRequest<U,V> execute()
     {
@@ -352,6 +357,14 @@ abstract public class KKBaseRequest<U,V>
             {
                 mAnnotationBaseUrl = ((KKBaseUrl) annotation).value();
             }
+            else if ( annotation instanceof KKShowLoadingView)
+            {
+                mShowLoadingView = true;
+            }
+            else if ( annotation instanceof KKShowToast)
+            {
+                mShowToast = true;
+            }
             else if ( annotation instanceof KKGet)
             {
                 mRequestMethod = KKRequestMethod.GET;
@@ -388,6 +401,8 @@ abstract public class KKBaseRequest<U,V>
         return true;
     }
     protected void willExecute(BaseRequest request){}
+    protected void willShowLoadingView() {  }
+    protected void willShowToast(String message) {  }
 
     protected String getBaseUrl()
     {
