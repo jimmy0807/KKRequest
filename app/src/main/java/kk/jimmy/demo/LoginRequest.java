@@ -3,6 +3,8 @@ package kk.jimmy.demo;
 import com.kk.request.KKBaseRequest;
 import com.kk.request.annotation.KKGet;
 import com.kk.request.annotation.KKGsonList;
+import com.kk.request.annotation.KKShowLoadingView;
+import com.kk.request.annotation.KKShowToast;
 import com.kk.request.annotation.KKSubUrl;
 
 import org.json.JSONArray;
@@ -12,6 +14,8 @@ import java.util.List;
 @KKGsonList(yaozeyulist.class)
 @KKGet
 @KKSubUrl("yaozeyu.json")
+@KKShowToast
+@KKShowLoadingView
 public class LoginRequest extends KKBaseRequest<JSONArray, List<yaozeyulist>>
 {
     //    @Override
