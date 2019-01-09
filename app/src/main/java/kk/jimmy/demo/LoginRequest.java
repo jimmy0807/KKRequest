@@ -13,7 +13,7 @@ import java.util.List;
 
 @KKGsonList(yaozeyulist.class)
 @KKGet
-@KKSubUrl("yaozeyu.json")
+@KKSubUrl("test.json")
 @KKShowToast
 @KKShowLoadingView
 public class LoginRequest extends KKBaseRequest<JSONArray, List<yaozeyulist>>

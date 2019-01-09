@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        KKRequestManager.getInstance().setBaseUrl("http://10.139.40.171:8080/").setInterceptor(new TestInterceptor()).setTimeOut(30);
+        KKRequestManager.getInstance().setBaseUrl("http://d.kkcredit.cn/rn/v2.0/android/").setInterceptor(new TestInterceptor()).setTimeOut(30);
         LoginRequest s = new LoginRequest();
         new LoginRequest().execute().onSuccess((List<yaozeyulist> data) -> {
 
